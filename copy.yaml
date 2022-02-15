@@ -1,0 +1,59 @@
+name: binary increment
+source code: |+
+  input: '1011#'
+  blank: ' '
+  start state: r
+  table:
+    # scan to the rightmost digit
+    r:
+      1: {write: 'y', R: find_H_1}
+      0: {write: 'x', R: find_H_0}
+      '#': {L: left}
+      
+    find_H_1:
+      1: {R: find_H_1}
+      0: {R: find_H_1}
+      '#': {R: find_B_1}
+      
+    find_H_0:
+      1: {R: find_H_0}
+      0: {R: find_H_0}
+      '#': {R: find_B_0}
+    
+    find_B_1:
+     0: {R: find_B_1}
+     1: {R: find_B_1}
+     ' ': {write: 1, L: find_B}
+     
+    find_B_0:
+     1: {R: find_B_0}
+     0: {R: find_B_0}
+     ' ': {write: 0, L: find_B}
+     
+    find_B:
+      1: {L: find_B}
+      0: {L: find_B}
+      x: {R: r}
+      y: {R: r}
+      '#': {L: find_B}
+    
+    left:
+      'x': {write: 0, L: left}
+      'y': {write: 1, L: left}
+      ' ': {R: set_r}
+    set_r:
+      1: {R: set_r}
+      0: {R: set_r}
+      '#': {R: done}
+    done:
+
+positions:
+  r: {x: 508.23, y: 297.88}
+  find_H_1: {x: 357.41, y: 433.22}
+  find_H_0: {x: 549.41, y: 49.97}
+  find_B_1: {x: 174.84, y: 336.56}
+  find_B_0: {x: 373.08, y: 20}
+  find_B: {x: 166.9, y: 130.96}
+  left: {x: 617.3, y: 124.48}
+  set_r: {x: 744.45, y: 149.86, fixed: false}
+  done: {x: 704.41, y: 267.83}
